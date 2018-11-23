@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             VALUES (:mail, :pass, :name, :lastname, :salt, NOW(), :type)";
             $user = $con->prepare($sql);
             $user->execute(array('mail' => $mail, 'pass'=>$password, 'name'=>$name,'lastname'=>$lastname, 'salt'=>$salt, 'type'=>$type));       
-            echo "{error:0, message:'El usuario fue agregado correctamente.'}";
+            echo "{code:0, message:'El usuario fue agregado correctamente.'}";
         }
         else{
-            echo "{error:-2, message:'Todos los campos son obligatorios'}";
+            echo "{code:-2, message:'Todos los campos son obligatorios'}";
         }
     }
     else{
-        echo "{error:-1, message:'Ocurrio un error con el servidor'}";
+        echo "{code:-1, message:'Ocurrio un error con el servidor'}";
     }
 }
 

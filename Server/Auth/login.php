@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //Logged
             session_start();
             $_SESSION["user"] = $u["ID_U"];
-            echo"{ error: 0, message: 'Inicio exitoso.' }";
+            echo"{ code: 0, message: 'Inicio exitoso.' }";
         }else{
-            echo"{ error: -1, message: 'Ocurrio un error, verifique su correo y contraseña.' }";
+            echo"{ code: -1, message: 'Ocurrio un error, verifique su correo y contraseña.' }";
             //Error
         }
     }
