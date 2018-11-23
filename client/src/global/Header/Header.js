@@ -12,7 +12,7 @@ class Header extends Component {
         return (
             <Navbar color="light" light expand="md" >
                 <NavbarBrand href="/"> <img src={logoUcaribe} width="200" className="Ucaribe-logo" alt="logo" />
-                    <h4 class="text-center">OQUEDAD</h4>
+                    <h4 className="text-center">OQUEDAD</h4>
                 </NavbarBrand>
             </Navbar>
         );

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Button, Input, Form } from 'reactstrap';
 import axios from 'axios'
 import Cardboard from './Projects/cardboard'
-import qs from 'qs';
+
 
 class Find extends Component {
     constructor() {
@@ -19,7 +19,7 @@ class Find extends Component {
 
     componentDidMount() {
         //last projects
-        axios.post("http://localhost:80/default.php").then(res => {
+        axios.get("http://localhost:80/default.php").then(res => {
             this.setState({ data: res.data })
         }).catch(error => {
             alert(error)
@@ -30,26 +30,24 @@ class Find extends Component {
         this.setState({ search: e.target.value })
     }
     handleSubmit(event) {
-        //search
-
-        const params = {
-            Project: this.state.search
-        }
-        axios.post("http://localhost:80/default.php",
-            qs.stringify(params)
-        ).then(res => {
-            if (this.state.search != "") {
+        if (this.state.search !== "") {
+            axios.get("http://localhost:80/Server/Projects/search.php?Project=" + this.state.search,
+            ).then(res => {
+                console.log(res);
                 this.setState({
                     data: res.data, text: "El resultado de tu búsqueda '" + this.state.search + "' es:"
                 })
-            }
-            else {
-                this.setState({ data: res.data, text: "Últimos proyectos" })
-            }
-        }).catch(error => {
-            alert(error)
-        });
-        event.preventDefault();
+            }).catch(error => {
+                alert(error)
+            });
+            event.preventDefault();
+        } else {
+            axios.get("http://localhost:80/default.php").then(res => {
+                this.setState({ data: res.data })
+            }).catch(error => {
+                alert(error)
+            });
+        }
     }
 
     render() {
@@ -71,9 +69,9 @@ class Find extends Component {
                     <h2>{this.state.text}</h2>
                     <Row>
                         {
-                            this.state.data.map((item, i) => {
+                            this.state.data.length > 0 ? this.state.data.map((item, i) => {
                                 return <Col key={item.ID_P} xs="4"><Cardboard Img={item.Image} Title={item.Title} Description={item.Description}></Cardboard></Col>
-                            })
+                            }) : "No hay ningún proyecto relacionado a tú busqueda."
                         }
                     </Row>
                 </Container>
