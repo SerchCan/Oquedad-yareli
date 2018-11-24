@@ -1,6 +1,10 @@
 <?php
 include_once('../Config/database.php');
-header('Access-Control-Allow-Origin: *');
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+}
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
 header('Access-Control-Allow-Headers: Host, Connection, Accept, Authorization, Content-Type, X-Requested-With, User-Agent, Referer, Methods');
 
@@ -57,18 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $list=$con->prepare($sql);
                 $list->execute(array('title'=> $Title,'description'=> $Description,'image'=> $Image,'file'=> $File, 'adviser'=> $Adviser, 'major'=> $Major, 'period'=> $Period));
 
-                echo "{code:0, message: 'Insertado correctamente' }";
+                $data=array('code'=>0,'message'=>'Insertado correctamente');
+                echo json_encode($data);
             }
             else{
-                echo "{code:-3, message: 'El archivo o la imagen no fueron subidos correctamente' }";
+                $data=array('code'=>-3,'message'=>'El archivo o la imagen no fueron subidos correctamente');
+                echo json_encode($data);
             }
         }
         else{
-            echo "{code:-2, message: 'Todos los campos son obligatorios' }";
+            $data=array('code'=>-2,'message'=>'Todos los campos son obligatorios');
+            echo json_encode($data);
         }
     }
     else{
-        echo "{code:-2, message: 'Todos los campos son obligatorios' }";
+        $data=array('code'=>-2,'message'=>'Todos los campos son obligatorios');
+        echo json_encode($data);
     }
 }
 
