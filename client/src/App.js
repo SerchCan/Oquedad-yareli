@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Navbar, NavbarBrand, Row, Button, Col, Label, Form, FormGroup, Input, Modal, ModalFooter, ModalBody, ModalHeader } from 'reactstrap';
-import logoUcaribe from './global/Header/images/logoUcaribe.png'
+import logoUcaribe from './global/Home/Header/images/logoUcaribe.png'
 
-import Find from './global/content/Find/find';
+import Home from './global/Home/Home';
+import Dashboard from './global/Dashboard/dashboard';
+import AddProject from './global/Dashboard/Admin/AddProject/Add'
 import axios from 'axios'
 import qs from 'qs'
+import { Redirect, BrowserRouter as Router, Route, Link } from 'react-router-dom'
+
 class App extends Component {
     constructor() {
         super()
@@ -81,7 +85,6 @@ class App extends Component {
             } else {
                 //handle success
                 this.setState({ isLogged: true, id: res.id });
-                alert("Inicio de sesión exitoso")
             }
         });
         this.toggle2();
@@ -89,69 +92,81 @@ class App extends Component {
     render() {
         return (
             <div className="App" >
-                <div>
-                    <Navbar color="light" light expand="md" >
-                        <NavbarBrand className="col-md-8" href="/"> <img src={logoUcaribe} width="200" className="Ucaribe-logo" alt="logo" />
-                            <h4 className="text-left">OQUEDAD</h4>
-                        </NavbarBrand>
+                <Router>
+                    <div>
+                        <div className="Header ">
+                            <Navbar color="light" light expand="md" >
+                                <Link to="/">
+                                    <NavbarBrand className="col-md-8" href="/"> <img src={logoUcaribe} width="200" className="Ucaribe-logo" alt="logo" />
+                                        <h4 className="text-left">OQUEDAD</h4>
+                                    </NavbarBrand>
+                                </Link>
 
-                        {this.state.isLogged ? <Button onClick={this.logout}>Cerrar Sesión</Button> : <Row>
-                            <div>
-                                <Col>
-                                    <Button color="info" onClick={this.toggle1}>Registrarse</Button>
-                                </Col>
+                                {this.state.isLogged ? (<div><Link to="/dashboard">Panel de usuario</Link> <Button color="danger" onClick={this.logout}>Cerrar Sesión</Button></div>) : <Row>
+                                    <div>
+                                        <Col>
+                                            <Button color="info" onClick={this.toggle1}>Registrarse</Button>
+                                        </Col>
 
-                                <Modal isOpen={this.state.modal1} toggle={this.toggle1} className={this.props.className}>
-                                    <ModalHeader toggle={this.toggle1}>Registrarse</ModalHeader>
-                                    <ModalBody>
-                                        <Form>
-                                            <FormGroup>
-                                                <Label>Nombre(s): </Label>
-                                                <Input value={this.state.Name} onChange={this.Handler} type="text" name="Name"></Input>
-                                                <Label>Apellidos: </Label>
-                                                <Input value={this.state.LastName} onChange={this.Handler} type="text" name="LastName"></Input>
-                                                <Label>Correo: </Label>
-                                                <Input value={this.state.Mail1} onChange={this.Handler} type="email" name="Mail1"></Input>
-                                                <Label>Contraseña: </Label>
-                                                <Input value={this.state.Password1} onChange={this.Handler} type="password" name="Password1"></Input>
+                                        <Modal isOpen={this.state.modal1} toggle={this.toggle1} className={this.props.className}>
+                                            <ModalHeader toggle={this.toggle1}>Registrarse</ModalHeader>
+                                            <ModalBody>
+                                                <Form>
+                                                    <FormGroup>
+                                                        <Label>Nombre(s): </Label>
+                                                        <Input value={this.state.Name} onChange={this.Handler} type="text" name="Name"></Input>
+                                                        <Label>Apellidos: </Label>
+                                                        <Input value={this.state.LastName} onChange={this.Handler} type="text" name="LastName"></Input>
+                                                        <Label>Correo: </Label>
+                                                        <Input value={this.state.Mail1} onChange={this.Handler} type="email" name="Mail1"></Input>
+                                                        <Label>Contraseña: </Label>
+                                                        <Input value={this.state.Password1} onChange={this.Handler} type="password" name="Password1"></Input>
 
-                                            </FormGroup>
-                                        </Form>
-                                    </ModalBody>
-                                    <ModalFooter>
-                                        <Button color="primary" onClick={this.submit1}>Registrarse</Button>
-                                        <Button color="secondary" onClick={this.toggle1}>Cancelar</Button>
-                                    </ModalFooter>
-                                </Modal>
-                            </div>
-                            <div>
-                                <Col>
-                                    <Button color="success" onClick={this.toggle2}>Iniciar Sesión</Button>
-                                </Col>
-                                <Modal isOpen={this.state.modal2} toggle={this.toggle2} className={this.props.className}>
-                                    <Form>
-                                        <ModalHeader toggle={this.toggle2}>Iniciar Sesión</ModalHeader>
-                                        <ModalBody>
-                                            <FormGroup>
-                                                <Label>Correo electrónico:</Label>
-                                                <Input onChange={this.Handler} value={this.state.Mail2} type="email" name="Mail2" placeholder="Correo Electrónico"></Input>
-                                                <Label>Contraseña:</Label>
-                                                <Input onChange={this.Handler} value={this.state.Password2} type="password" name="Password2" placeholder="Contraseña"></Input>
-                                            </FormGroup>
-                                        </ModalBody>
-                                        <ModalFooter>
-                                            <Button color="primary" onClick={this.submit2}>Iniciar Sesión</Button>
-                                            <Button color="secondary" onClick={this.toggle2}>Cancelar</Button>
-                                        </ModalFooter>
-                                    </Form>
-                                </Modal>
-                            </div>
-                        </Row>
-                        }
+                                                    </FormGroup>
+                                                </Form>
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                <Button color="primary" onClick={this.submit1}>Registrarse</Button>
+                                                <Button color="secondary" onClick={this.toggle1}>Cancelar</Button>
+                                            </ModalFooter>
+                                        </Modal>
+                                    </div>
+                                    <div>
+                                        <Col>
+                                            <Button color="success" onClick={this.toggle2}>Iniciar Sesión</Button>
+                                        </Col>
+                                        <Modal isOpen={this.state.modal2} toggle={this.toggle2} className={this.props.className}>
+                                            <Form>
+                                                <ModalHeader toggle={this.toggle2}>Iniciar Sesión</ModalHeader>
+                                                <ModalBody>
+                                                    <FormGroup>
+                                                        <Label>Correo electrónico:</Label>
+                                                        <Input onChange={this.Handler} value={this.state.Mail2} type="email" name="Mail2" placeholder="Correo Electrónico"></Input>
+                                                        <Label>Contraseña:</Label>
+                                                        <Input onChange={this.Handler} value={this.state.Password2} type="password" name="Password2" placeholder="Contraseña"></Input>
+                                                    </FormGroup>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <Button color="primary" onClick={this.submit2}>Iniciar Sesión</Button>
+                                                    <Button color="secondary" onClick={this.toggle2}>Cancelar</Button>
+                                                </ModalFooter>
+                                            </Form>
+                                        </Modal>
+                                    </div>
+                                </Row>
+                                }
 
-                    </Navbar >
-                </div>
-                <Find />
+                            </Navbar >
+                        </div>
+
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/dashboard" component={Dashboard} />
+                        <Route exact path="/AddProject" component={AddProject} />
+
+                        {!this.state.isLogged ? <Redirect push to="/" /> : ""}
+                    </div>
+                </Router>
+
             </div>
         );
     }

@@ -1,4 +1,5 @@
 <?php
+include_once('../Config/database.php');
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
@@ -8,14 +9,17 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
 header('Access-Control-Allow-Headers: Host, Connection, Accept, Authorization, Content-Type, X-Requested-With, User-Agent, Referer, Methods');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {  
     session_start();
-    if(isset($_SESSION['user'])){
+    if(isset($_GET["Mail"])){
+        $mail='%'.$_GET["Mail"].'%';
+        $sql = "SELECT ID_U, Name, LastName FROM `Users` WHERE mail LIKE :mail and Type='1'";
+       
+        $project = $con->prepare($sql);
+        $project->execute(array('mail' => $mail));
+    
+        $projects= $project->fetch(PDO::FETCH_ASSOC);
+        echo json_encode($projects);
 
-        $data=array('code'=>200,'message'=>'User is logged', 'data'=>$_SESSION['user']);
-        echo json_encode($data);
     }
-    else{
-        $data=array('code'=>201,'message'=>'User is not logged');
-        echo json_encode($data);
-    }
+
 }
 ?>

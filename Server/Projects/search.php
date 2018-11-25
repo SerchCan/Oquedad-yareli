@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if(isset($_GET["Project"]) && !empty($_GET["Project"])){
         $search = "%".$_GET["Project"]."%";
         $sql="
-        SELECT DISTINCT projects.ID_P, projects.Title, projects.Description, projects.Image  FROM `projects` JOIN `users` JOIN `pivot` WHERE 
-        (projects.Title LIKE :search) OR 
+        SELECT DISTINCT projects.ID_P, projects.Title, projects.Description, projects.Image, projects.File FROM `projects` JOIN `users` JOIN `pivot` WHERE 
+        (projects.Title LIKE :search) OR (Projects.ID_P = :search) OR
         ((users.Name LIKE :search OR users.LastName LIKE :search OR users.Mail LIKE :search) AND projects.Adviser = users.ID_U) OR
         ((users.Name LIKE :search OR users.LastName LIKE :search OR users.Mail LIKE :search) AND pivot.ID_U = users.ID_U AND pivot.ID_P = projects.ID_P)
         ORDER BY(projects.ID_P) ASC";

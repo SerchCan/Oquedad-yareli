@@ -70,8 +70,8 @@ class Find extends Component {
                     <Row>
                         {
                             this.state.data.length > 0 ? this.state.data.map((item, i) => {
-                                return <Col key={item.ID_P} xs="4"><Cardboard Img={item.Image} Title={item.Title} Description={item.Description}></Cardboard></Col>
-                            }) : "No hay ningún proyecto relacionado a tú busqueda."
+                                return <Col key={item.ID_P} xs="4"><Cardboard Id={item.ID_P} Img={"http://localhost:80/Server/Images/" + item.Image} Title={item.Title} Description={item.Description} PDF={item.File}></Cardboard></Col>
+                            }) : this.state.search == '' ? "No hay ningún proyecto nuevo" : "No hay ningún proyecto relacionado a tú busqueda."
                         }
                     </Row>
                 </Container>

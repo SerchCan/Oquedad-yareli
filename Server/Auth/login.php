@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST["Mail"], $_POST["Password"])){
         $mail = $_POST["Mail"];
         $password = $_POST["Password"];
-        $sql = "SELECT ID_U, Password, Salt FROM `users` WHERE Mail=:M";
+        $sql = "SELECT ID_U,Type, Password, Salt FROM `users` WHERE Mail=:M";
 
         $user = $con->prepare($sql);
         $user->execute(array('M' => $mail));
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($input_password_hash == $u["Password"]){
             //Logged
             session_start();
-            $_SESSION["user"] = $u["ID_U"];
+            $_SESSION["user"] = array('id'=> $u["ID_U"], 'type'=>$u["Type"]);
 
             $data=array('code'=>0,'message'=>'Inicio exitoso');
             echo json_encode($data);
