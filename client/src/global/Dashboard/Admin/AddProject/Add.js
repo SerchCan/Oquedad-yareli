@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Container, Input, Form, Button, Label, FormGroup, Badge, Col } from 'reactstrap';
+import { Container, Input, Form, Button, Label, FormGroup, Badge, Col, Row } from 'reactstrap';
 import axios from 'axios';
 import qs from 'qs';
 class AddForm extends Component {
@@ -151,8 +151,14 @@ class AddForm extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label>Integrantes del proyecto:</Label>
-                        <Input name="Integrant" value={this.state.Integrant} onChange={this.HandleChange} />
-                        <Button color="info" onClick={this.AddMember}>Añadir</Button>
+                        <Row>
+                            <Col xs="10">
+                                <Input name="Integrant" value={this.state.Integrant} onChange={this.HandleChange} />
+                            </Col>
+                            <Col xs="2">
+                                <Button color="info" onClick={this.AddMember}>Añadir integrante</Button>
+                            </Col>
+                        </Row>
                         <Container>
                             <h3>Integrantes:</h3>
                             {this.state.Collaborators.length > 0 ? this.state.Collaborators.map((elem, i) => {
@@ -165,7 +171,7 @@ class AddForm extends Component {
                             }) : ''}
                         </Container>
                     </FormGroup>
-                    <Button color="success" onClick={this.submit}>Añadir</Button>
+                    <Button color="success" onClick={this.submit}>Añadir Proyecto</Button>
                 </Form>
             </Container>
         );

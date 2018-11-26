@@ -1,2 +1,4 @@
 Server/Files/
+Server/Images/
+!Server/Images/PDFFlatIcon.png
 Server/Projects/form.html

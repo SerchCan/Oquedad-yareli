@@ -10,22 +10,30 @@ header('Access-Control-Allow-Headers: Host, Connection, Accept, Authorization, C
 
 //Receive a project data for edit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if(isset($_POST["Id"], $_POST["Title"],$_POST["Description"],$_POST["Adviser"],$_POST["Major"],$_POST["Period"])) {
-        if(!(empty($_POST["Id"]) && empty($_POST["Title"]) && empty($_POST["Description"]) && empty($_POST["Adviser"]) && empty($_POST["Major"]) && empty($_POST["Period"]))){ 
-            
-            $Id = $_POST["Id"];
+    if(isset($_POST["Id"], $_POST["Title"],$_POST["Description"],$_POST["Integrants"])) {
+        if(!(empty($_POST["Id"]) && empty($_POST["Title"]) && empty($_POST["Description"] && empty($_POST["Integrants"])))){ 
+            $Integrants=$_POST['Integrants'];
+            $Id = intval($_POST["Id"]);
             $Title = $_POST["Title"];
             $Description = $_POST["Description"];
-            $Adviser = $_POST["Adviser"];
-            $Major = $_POST["Major"];
-            $Period = $_POST["Period"];
 
-            $sql="UPDATE `projects`
-            SET Title = :title, Description = :description, Adviser = :adviser, ID_M = :major, ID_PER = :period
-            WHERE projects.ID_P = :id";
+            //update data
+            $sql="UPDATE `projects` SET Title = :title, Description = :description WHERE projects.ID_P = :id";
             $list=$con->prepare($sql);
-            $list->execute(array('title'=> $Title,'description'=> $Description,'id'=> $Id, 'adviser'=> $Adviser, 'major'=> $Major, 'period'=> $Period));
-            $data=array('code'=>0,'message'=>'Insertado correctamente');
+            $list->execute(array('title'=> $Title,'description'=> $Description,'id'=> $Id));
+            //delete members
+            $sql="DELETE FROM `pivot` WHERE ID_P=:id";
+            $del=$con->prepare($sql);
+            $del->execute(array('id'=>$Id));
+
+            //add members again
+            foreach($Integrants as $row){
+                $sql = "INSERT INTO `pivot`(ID_P,ID_U) VALUES(:project,:user)";
+                $Project=$con->prepare($sql);
+                $Project->execute(array('project'=>$Id,'user'=>$row['ID_U']));
+            }
+
+            $data=array('code'=>0,'message'=>'Actualizado correctamente');
             echo json_encode($data);
         }
         else{
@@ -46,13 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = "SELECT * FROM `projects` WHERE ID_P =  :id";
                 $list=$con->prepare($sql);
                 $list->execute(array('id'=> $id));
-                $fetch=$list->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($fetch);
+                $sql = "SELECT  users.ID_U, users.Name, users.LastName FROM `pivot` JOIN `users` WHERE pivot.ID_P =  :id AND pivot.ID_U = users.ID_U";
+                $member=$con->prepare($sql);
+                $member->execute(array('id'=> $id));
+                $memberFetch=$member->fetchAll(PDO::FETCH_ASSOC);
+                $fetch=$list->fetch(PDO::FETCH_ASSOC);
+                $data= array('project'=>$fetch, 'members'=>$memberFetch);
+                echo json_encode($data);
             }
         }
     }
 }
-
-?>
 
 ?>

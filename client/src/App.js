@@ -4,7 +4,9 @@ import logoUcaribe from './global/Home/Header/images/logoUcaribe.png'
 
 import Home from './global/Home/Home';
 import Dashboard from './global/Dashboard/dashboard';
-import AddProject from './global/Dashboard/Admin/AddProject/Add'
+import AddProject from './global/Dashboard/Admin/AddProject/Add';
+import EditProject from './global/Dashboard/Admin/EditProject/Edit';
+import RemoveProject from './global/Dashboard/Admin/RemoveProject/Remove';
 import axios from 'axios'
 import qs from 'qs'
 import { Redirect, BrowserRouter as Router, Route, Link } from 'react-router-dom'
@@ -163,7 +165,8 @@ class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/AddProject" component={AddProject} />
-
+                        <Route exact path="/EditProject" component={EditProject} />
+                        <Route exact path="/RemoveProject" component={RemoveProject} />
                         {!this.state.isLogged ? <Redirect push to="/" /> : ""}
                     </div>
                 </Router>

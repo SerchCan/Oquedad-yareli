@@ -8,36 +8,6 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE, PUT');
 header('Access-Control-Allow-Headers: Host, Connection, Accept, Authorization, Content-Type, X-Requested-With, User-Agent, Referer, Methods');
 
-function upload_file($name){
-    $name       = $_FILES[$name]['name'];  
-    $temp_name  = $_FILES["file"]['tmp_name'];  
-    if(isset($name)){
-        if(!empty($name)){      
-            $location = '../Files/';      
-            if(move_uploaded_file($temp_name, $location.$name)){
-                return $name;
-            }
-        }       
-    }  else {
-        return -1;
-    }
-}
-function upload_image($name){
-    $name       = $_FILES[$name]['name'];  
-    $temp_name  = $_FILES["image"]['tmp_name'];  
-    if(isset($name)){
-        if(!empty($name)){      
-            $location = '../Images/';      
-            if(move_uploaded_file($temp_name, $location.$name)){
-                return $name;
-            }
-        }       
-    }  else {
-        return -1;
-    }
-}
-
-
 // Add project
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST["Title"],$_POST["Description"],$_POST["Adviser"],$_POST["Major"],$_POST["Period"],$_POST['Integrants'],$_POST["file"],$_POST["image"])) {
