@@ -60,12 +60,13 @@ class App extends Component {
         }
         axios.post('http://localhost:80/Server/Auth/register.php', qs.stringify(Params), { withCredentials: true }).then(res => {
             res = res.data;
-            if (res.code !== 0) {
+            console.log(res);
+            if (res.code != 0) {
                 //handle error
                 alert(res.message)
             } else {
-                alert("Registro exitoso")
                 //handle success
+                alert("Registro exitoso")
             }
         });
         this.toggle1();
