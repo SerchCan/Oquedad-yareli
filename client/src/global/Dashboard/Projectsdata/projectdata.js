@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Cardboard from "../../Home/content/Find/Projects/cardboard";
 import Axios from 'axios';
-import { Col, Row } from "reactstrap";
+import { CardGroup, Col, Row, Card, CardImg, CardBody, CardTitle, CardText, CardFooter } from "reactstrap";
 class userAdviser extends Component {
     constructor(props) {
         super(props)
@@ -40,11 +39,45 @@ class userAdviser extends Component {
         return (
             <div className="projects" >
                 <h3>{this.state.type !== "1" ? "Proyectos que asesoraste:" : "Projectos del que formas parte:"}</h3>
-                <Row>
+
+                <CardGroup>
                     {this.state.data.length > 0 ? this.state.data.map((item, i) => {
-                        return <Col key={item.ID_P} xs="4"><Cardboard Id={item.ID_P} Img={item.Image} Title={item.Title} Description={item.Description}></Cardboard></Col>
+                        return <Col xs="12" sm="12" md="6" lg="4"><Card key={i}>
+                            <CardImg top height="256" src={"http://localhost:80/Server/Images/" + item.Image} />
+                            <CardBody style={{ backgroundColor: '#333', color: '#fff' }}>
+                                <CardTitle>{item.Title}</CardTitle>
+                                <CardText>{item.Description}</CardText>
+                            </CardBody>
+                            <CardFooter>
+                                <Row>
+                                    <small>Id del proyecto #{item.ID_P}</small>
+                                </Row>
+                                <Row>
+                                    <small>
+
+                                        <a href={"http://localhost:80/Server/Files/" + item.File} download="">
+                                            <img alt='' src="http://localhost:80/Server/Images/PDFFlatIcon.png" width="32"></img>
+                                        </a>
+                                        Descarga el PDF del proyecto.
+                                    </small>
+                                </Row>
+                            </CardFooter>
+                        </Card> </Col>
+
                     }) : "No hay ningún proyecto del que formes parte."}
-                </Row>
+
+                </CardGroup>
+
+
+                {
+                    /*
+                                    <CardDeck>
+                                        {this.state.data.length > 0 ? this.state.data.map((item, i) => {
+                                            return <Cardboard key={item.ID_P} Id={item.ID_P} Img={"http://localhost:80/Server/Images/" + item.Image} Title={item.Title} Description={item.Description} PDF={item.File}></Cardboard>
+                                        }) : "No hay ningún proyecto del que formes parte."}
+                                    </CardDeck>*/
+                }
+
             </div>
         );
     }

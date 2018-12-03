@@ -5,6 +5,7 @@ import logoUcaribe from './global/Home/Header/images/logoUcaribe.png'
 import Home from './global/Home/Home';
 import Dashboard from './global/Dashboard/dashboard';
 import AddProject from './global/Dashboard/Admin/AddProject/Add';
+import AddAdmin from './global/Dashboard/Admin/AddAdmin/AddAdmin';
 import EditProject from './global/Dashboard/Admin/EditProject/Edit';
 import RemoveProject from './global/Dashboard/Admin/RemoveProject/Remove';
 import axios from 'axios'
@@ -165,6 +166,7 @@ class App extends Component {
                         <Route exact path="/" component={Home} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/AddProject" component={AddProject} />
+                        <Route exact path="/AddAdmin" component={AddAdmin} />
                         <Route exact path="/EditProject" component={EditProject} />
                         <Route exact path="/RemoveProject" component={RemoveProject} />
                         {!this.state.isLogged ? <Redirect push to="/" /> : ""}

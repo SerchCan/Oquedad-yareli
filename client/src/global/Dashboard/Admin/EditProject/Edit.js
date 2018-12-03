@@ -23,6 +23,8 @@ class EditForm extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
     FillData() {
+        //empty previous collabs
+        this.setState({ Collaborators: [] });
         axios.get("http://localhost:80/server/projects/edit.php?Id=" + this.state.id).then(res => {
             res = res.data;
             console.log(res)
@@ -68,7 +70,10 @@ class EditForm extends Component {
                 alert("Usuario no registrado o Usuario no es un estudiante.");
             }
             else {
-                this.setState({ Collaborators: [...this.state.Collaborators, res] });
+                let data = this.state.Collaborators;
+                if (data.findIndex(x => x.ID_U === res.ID_U) == -1) {
+                    this.setState({ Collaborators: [...this.state.Collaborators, res] });
+                }
             }
 
         })

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Container, Input, Form, Button, Label, FormGroup, Badge, Col, Row } from 'reactstrap';
+import PeriodForm from '../AddPeriod/Periods';
 import axios from 'axios';
 import qs from 'qs';
 class AddForm extends Component {
@@ -25,7 +26,9 @@ class AddForm extends Component {
         this.submit = this.submit.bind(this);
         this.AddMember = this.AddMember.bind(this);
         this.removeMember = this.removeMember.bind(this);
+        this.update = this.update.bind(this);
     }
+
     componentDidMount() {
         axios.get("http://localhost:80/server/projects/add.php").then(res => {
             res = res.data;
@@ -84,7 +87,10 @@ class AddForm extends Component {
                 alert("Usuario no registrado o Usuario no es un estudiante.");
             }
             else {
-                this.setState({ Collaborators: [...this.state.Collaborators, res] });
+                let data = this.state.Collaborators;
+                if (data.findIndex(x => x.ID_U === res.ID_U) == -1) {
+                    this.setState({ Collaborators: [...this.state.Collaborators, res] });
+                }
             }
 
         })
@@ -99,6 +105,12 @@ class AddForm extends Component {
     }
     HandleChange(e) {
         this.setState({ [e.target.name]: e.target.value });
+    }
+    update() {
+        axios.get("http://localhost:80/server/projects/add.php").then(res => {
+            res = res.data;
+            this.setState({ advisers: res.users, majors: res.majors, periods: res.periods });
+        })
     }
     render() {
         //$_POST["Adviser"],$_POST["Major"],$_POST["Period"])) {
@@ -142,12 +154,19 @@ class AddForm extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label>Periodo de realización:</Label>
-                        <Input type="select" name="Period" onChange={this.HandleChange} >
-                            <option></option>
-                            {this.state.periods.map((elem, i) => {
-                                return <option key={i} value={elem.ID_PER}>{elem.Period + ' ' + elem.Year}</option>
-                            })}
-                        </Input>
+                        <Row>
+                            <Col xs="10">
+                                <Input type="select" name="Period" onChange={this.HandleChange} >
+                                    <option></option>
+                                    {this.state.periods.map((elem, i) => {
+                                        return <option key={i} value={elem.ID_PER}>{elem.Period + ' ' + elem.Year}</option>
+                                    })}
+                                </Input>
+                            </Col>
+                            <Col xs="2">
+                                <PeriodForm update={this.update}></PeriodForm>
+                            </Col>
+                        </Row>
                     </FormGroup>
                     <FormGroup>
                         <Label>Integrantes del proyecto:</Label>

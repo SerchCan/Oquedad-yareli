@@ -36,8 +36,8 @@ class Dashboard extends Component {
         return (
             <Container>
                 <Container>
-                    <h2>Panel de administración:</h2>
-                    {this._isMounted && this.state.type == 3 ? <Admin /> : ''}
+
+                    {this._isMounted && this.state.type == 3 ? <div><h2>Panel de administración:</h2> <Admin /></div> : ''}
 
                 </Container>
 
