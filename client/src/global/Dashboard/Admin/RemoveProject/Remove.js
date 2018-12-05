@@ -41,6 +41,7 @@ class RemoveForm extends Component {
             axios.post("http://localhost:80/Server/Projects/delete.php", qs.stringify(params)).then(res => {
                 console.log(res);
                 res = res.data;
+                // eslint-disable-next-line
                 if (res.code == 0) {
                     alert("Eliminado Correctamente");
                 }

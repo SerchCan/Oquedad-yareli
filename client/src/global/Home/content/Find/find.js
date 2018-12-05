@@ -8,19 +8,20 @@ import {
     CardText,
     CardFooter,
 } from 'reactstrap';
-import axios from 'axios'
-import Cardboard from './Projects/cardboard'
-
-
+import axios from 'axios';
 class Find extends Component {
     constructor() {
         super();
         this.state = {
             search: "",
             data: [],
-            text: "Últimos proyectos"
+            period: '0',
+            periods: [],
+            text: "Últimos proyectos",
+            id_per: 0
         }
         this.HandleChange = this.HandleChange.bind(this)
+        this.HandleChange2 = this.HandleChange2.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -31,26 +32,70 @@ class Find extends Component {
         }).catch(error => {
             alert(error)
         });
+        axios.get("http://localhost:80/server/projects/add.php").then(res => {
+            res = res.data;
+            this.setState({ periods: res.periods });
+        })
     }
 
     HandleChange(e) {
         this.setState({ search: e.target.value })
     }
-    handleSubmit(event) {
-        if (this.state.search !== "") {
-            axios.get("http://localhost:80/Server/Projects/search.php?Project=" + this.state.search,
+    HandleChange2(e) {
+        this.setState({ period: e.target.value })
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        var params;
+        var text;
+        var finded = true;
+        // eslint-disable-next-line
+        if (this.state.search != "") {
+            // eslint-disable-next-line
+            if (this.state.period != '0') {
+                params = {
+                    Project: this.state.search,
+                    Period: this.state.period
+                }
+                text = "El resultado de tu búsqueda '" + this.state.search + "' en periodo es:"
+            }
+            else {
+                params = {
+                    Project: this.state.search,
+                }
+                text = "El resultado de tu búsqueda '" + this.state.search + "' es:"
+            }
+
+        } else {
+            // eslint-disable-next-line
+            if (this.state.period != '0') {
+
+                params = {
+                    Period: this.state.period
+                }
+                text = "El resultado de tu búsqueda en periodo es:"
+            } else {
+                finded = false;
+            }
+        }
+        if (finded) {
+            axios.get("http://localhost:80/Server/Projects/search2.php", {
+                params: params
+            }
             ).then(res => {
                 console.log(res);
                 this.setState({
-                    data: res.data, text: "El resultado de tu búsqueda '" + this.state.search + "' es:"
+                    data: res.data, text: text
                 })
             }).catch(error => {
                 alert(error)
             });
-            event.preventDefault();
         } else {
             axios.get("http://localhost:80/default.php").then(res => {
-                this.setState({ data: res.data })
+                this.setState({
+                    data: res.data, text: text
+                })
             }).catch(error => {
                 alert(error)
             });
@@ -61,13 +106,21 @@ class Find extends Component {
         return (
             <Container>
                 <Container>
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form >
                         <Row>
-                            <Col xs="10">
-                                <Input type="text" name="Project" onChange={this.HandleChange} placeholder="Buscar..." />
+                            <Col xs="6">
+                                <Input type="text" value={this.state.search} onChange={this.HandleChange} placeholder="Palabras clave" />
                             </Col>
                             <Col xs="2">
-                                <Button color="primary"><span role="img" aria-label="Buscar">🔎</span></Button>
+                                <Input type="select" value={this.state.period} onChange={this.HandleChange2} placeholder="Periodo" >
+                                    <option value="0">Periodo</option>
+                                    {this.state.periods.map((elem, i) => {
+                                        return <option key={i} value={elem.ID_PER}>{elem.Period + ' ' + elem.Year}</option>
+                                    })}
+                                </Input>
+                            </Col>
+                            <Col xs="2">
+                                <Button type='submit' onClick={this.handleSubmit} color="primary"><span role="img" aria-label="Buscar">🔎</span></Button>
                             </Col>
                         </Row>
                     </Form>
@@ -101,6 +154,7 @@ class Find extends Component {
                                     </CardFooter>
                                 </Card>
                                 </Col>
+                                // eslint-disable-next-line
                             }) : this.state.search == '' ? "No hay ningún proyecto nuevo" : "No hay ningún proyecto relacionado a tú busqueda."
                         }
                     </CardGroup>

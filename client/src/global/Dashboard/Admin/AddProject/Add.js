@@ -88,6 +88,7 @@ class AddForm extends Component {
             }
             else {
                 let data = this.state.Collaborators;
+                // eslint-disable-next-line
                 if (data.findIndex(x => x.ID_U === res.ID_U) == -1) {
                     this.setState({ Collaborators: [...this.state.Collaborators, res] });
                 }

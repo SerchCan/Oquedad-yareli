@@ -37,7 +37,8 @@ class Dashboard extends Component {
             <Container>
                 <Container>
 
-                    {this._isMounted && this.state.type == 3 ? <div><h2>Panel de administración:</h2> <Admin /></div> : ''}
+                    {// eslint-disable-next-line
+                        this._isMounted && this.state.type == 3 ? <div><h2>Panel de administración:</h2> <Admin /></div> : ''}
 
                 </Container>
 

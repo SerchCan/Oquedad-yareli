@@ -21,6 +21,7 @@ class addAdminForm extends Component {
     find() {
         axios.get("http://localhost/Server/Admins/Add.php?Mail=" + this.state.Mail).then(res => {
             res = res.data;
+            // eslint-disable-next-line
             if (res != false) {
                 this.setState({
                     Id: res.ID_U,
@@ -51,6 +52,7 @@ class addAdminForm extends Component {
             }
             axios.post("http://localhost/Server/Admins/Add.php", qs.stringify(params)).then(res => {
                 res = res.data;
+                // eslint-disable-next-line
                 if (res.code == 0) {
                     alert("Administrador correctamente asignado.")
                 }

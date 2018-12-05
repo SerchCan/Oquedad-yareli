@@ -64,6 +64,7 @@ class App extends Component {
         axios.post('http://localhost:80/Server/Auth/register.php', qs.stringify(Params), { withCredentials: true }).then(res => {
             res = res.data;
             console.log(res);
+            // eslint-disable-next-line
             if (res.code != 0) {
                 //handle error
                 alert(res.message)

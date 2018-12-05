@@ -41,6 +41,7 @@ class EditForm extends Component {
         })
     }
     submit() {
+        // eslint-disable-next-line
         if (this.state.id != null && this.state.id != '') {
             const data = {
                 Id: this.state.id,
@@ -71,6 +72,7 @@ class EditForm extends Component {
             }
             else {
                 let data = this.state.Collaborators;
+                // eslint-disable-next-line
                 if (data.findIndex(x => x.ID_U === res.ID_U) == -1) {
                     this.setState({ Collaborators: [...this.state.Collaborators, res] });
                 }
